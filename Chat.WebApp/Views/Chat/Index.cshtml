@@ -1,0 +1,56 @@
+﻿@using System.Security.Claims
+@using Chat.Infrastructure.Models
+@model List<Message>
+@{
+    ViewData["Title"] = "Chat";
+
+    string userId = "", userName = "";
+
+    var identity = User.Identity as ClaimsIdentity;
+    if (identity != null)
+    {
+        var userIdClaim = identity.Claims.FirstOrDefault(f => f.Type == ClaimTypes.NameIdentifier);
+        if (userIdClaim != null)
+            userId = userIdClaim.Value;
+
+        var userNameClaim = identity.Claims.FirstOrDefault(f => f.Type == ClaimTypes.Name);
+        if (userNameClaim != null)
+            userName = userNameClaim.Value;
+    }
+}
+<script type="text/javascript">
+    let userId = '@userId'
+    let userName = '@userName';
+</script>
+<div class="container">
+
+    <div class="row">
+        <div class="col-6">
+            <ul id="messagesList">
+                @foreach (var msg in Model)
+                {
+                    var style = msg.UserId == userId ? "sent" : "received";
+                    <li>@msg.Text</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <input type="text" id="userMessage" />
+            <input type="button" id="btnSend" value="Send" />
+        </div>
+    </div>
+
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/aspnet/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
+

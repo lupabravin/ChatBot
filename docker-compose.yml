@@ -1,0 +1,60 @@
+version: '3.2'
+services: 
+  sqlserver:
+    container_name: sqlserver
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "2021@Challenge!Jobsity"
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      - chat.network
+    ports: 
+      - "1433:1433"
+    restart: on-failure
+    volumes:
+      - ./volumes/mssql/data:/var/opt/mssql/data
+      - ./volumes/mssql/logs:/var/opt/mssql/log
+      - ./volumes/mssql/secrets:/var/opt/mssql/secrets
+
+  rabbit:
+    hostname: rabbit
+    container_name: rabbit
+    image: rabbitmq:management-alpine
+    environment: 
+      RABBITMQ_DEFAULT_USER: jobsity
+      RABBITMQ_DEFAULT_PASS: Jobsity2020
+    networks: 
+      - chat.network
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: on-failure
+    volumes: 
+      - ./volumes/rabbit:/var/lib/rabbitmq/mnesia
+
+  web:
+    build:
+      context: ./Chat.WebApp
+      dockerfile: Dockerfile
+    container_name: web
+    depends_on: 
+      - rabbit
+    environment: 
+      - DBDATABASE=ChatDB
+      - DBHOST=sqlserver
+      - DBPASSWORD=2021@Challenge!Jobsity
+      - DBPORT=1433
+      - DBUSER=sa
+      - ENGINE=mssql
+      - RabbitConnectionString=amqp://jobsity:Jobsity2020@rabbit:5672
+    links: 
+      - sqlserver
+      - rabbit
+    networks:
+      - chat.network
+    ports: 
+      - "4000:80"
+    restart: on-failure
+
+networks: 
+  chat.network:
