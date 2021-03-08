@@ -11,6 +11,6 @@ namespace Chat.Infrastructure.Models
 {
     public class AppUser : IdentityUser
     {
-        public HashSet<Message> Messages { get; set; } = new HashSet<Message>();
+        public virtual ICollection<Message> Messages { get; set; } = new HashSet<Message>();
     }
 }

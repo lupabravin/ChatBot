@@ -18,6 +18,7 @@
             userName = userNameClaim.Value;
     }
 }
+<link rel="stylesheet" href="~/css/chat.css" />
 <script type="text/javascript">
     let userId = '@userId'
     let userName = '@userName';
@@ -25,12 +26,28 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-6">
+        <div class="col-12">
             <ul id="messagesList">
                 @foreach (var msg in Model)
                 {
-                    var style = msg.UserId == userId ? "sent" : "received";
-                    <li>@msg.Text</li>
+                    var date =
+                        msg.Date.Hour.ToString().PadLeft(2, '0') + ":" +
+                        msg.Date.Minute.ToString().PadLeft(2, '0') + " - " +
+                        msg.Date.Month.ToString().PadLeft(2, '0') + "/" +
+                        msg.Date.Day.ToString().PadLeft(2, '0') + "/" +
+                        msg.Date.Year;
+
+
+                        var sent = msg.UserId == userId;
+                    var divClass = sent ? "message sent" : "message received";
+                    var liStyle = sent ? "text-align: -webkit-right;" : "text-align: -webkit-left;";
+                    <li style="@liStyle">
+                        <div class="@divClass" style="text-align: left">
+                            <p style="font-weight: bold; text-align: right">@msg.Sender.UserName</p>
+                            @msg.Text
+                            <p style="font-size: 12px; margin-top: 7px; text-align:right">@date</p>
+                        </div>
+                    </li>
                 }
             </ul>
         </div>
@@ -41,7 +58,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
             <input type="text" id="userMessage" />
             <input type="button" id="btnSend" value="Send" />
         </div>

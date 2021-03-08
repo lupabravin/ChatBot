@@ -1,0 +1,119 @@
+﻿.message {
+    position: relative;
+    padding: 15px;
+    margin: 5px 0 0 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    width: fit-content
+}
+
+/* Variant : for left positioned triangle
+------------------------------------------ */
+
+.message.received {
+    color: #000;
+    margin-left: 40px;
+    background: #F1F1F1;
+    /* css3 */
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#d1d1d1), to(#F1F1F1));
+    background: -moz-linear-gradient(#d1d1d1, #F1F1F1);
+    background: -o-linear-gradient(#d1d1d1, #F1F1F1);
+    background: linear-gradient(#d1d1d1, #F1F1F1);
+}
+
+/* Variant : for right positioned triangle
+------------------------------------------ */
+
+.message.sent {
+    color: #fff;
+    margin-right: 40px;
+     background: #075698; /* default background for browsers without gradient support */
+    /* css3 */
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#2e88c4), to(#075698));
+    background: -moz-linear-gradient(#2e88c4, #075698);
+    background: -o-linear-gradient(#2e88c4, #075698);
+    background: linear-gradient(#2e88c4, #075698);
+
+}
+
+/* THE TRIANGLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+.message:after {
+    content: "";
+    position: absolute;
+    bottom: -20px; /* value = - border-top-width - border-bottom-width */
+    left: 50px; /* controls horizontal position */
+    border-width: 20px 0 0 20px; /* vary these values to change the angle of the vertex */
+    border-style: solid;
+    border-color: #075698 transparent;
+    /* reduce the damage in FF3.0 */
+    display: block;
+    width: 0;
+}
+
+
+/* Variant : left
+------------------------------------------ */
+
+.message.received:after {
+    top: 16px;
+    left: -40px; /* value = - border-left-width - border-right-width */
+    bottom: auto;
+    border-width: 15px 40px 0 0; /* vary these values to change the angle of the vertex */
+    border-color: transparent #D8D8D8;
+}
+
+/* Variant : right
+------------------------------------------ */
+
+.message.sent:after {
+    top: 16px;
+    right: -40px; /* value = - border-left-width - border-right-width */
+    bottom: auto;
+    left: auto;
+    border-width: 15px 0 0 40px; /* vary these values to change the angle of the vertex */
+    border-color: transparent #237AB7;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-height: 45em;
+    overflow: auto;
+}
+
+p {
+    margin: 0;
+    text-align: left
+}
+
+#userMessage {
+    width: 89.5%;
+}
+
+#btnSend {
+    width: 10%
+}
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #065698;
+    border-radius: 15px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(13deg, #065698 14%,#1c789c 100%);
+    }
+
+::-webkit-scrollbar-track {
+    background: #ffffff;
+    border-radius: 7px;
+    box-shadow: inset 7px 10px 12px #f0f0f0;
+}

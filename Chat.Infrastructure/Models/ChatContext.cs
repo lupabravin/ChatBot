@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,23 @@ namespace Chat.Infrastructure.Models
 {
     public class ChatContext : IdentityDbContext
     {
-        public ChatContext(DbContextOptions options)
-           : base(options)
+        public ChatContext(DbContextOptions<ChatContext> options) : base(options)
         {
         }
 
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Message>()
-                .HasOne(m => m.User)
+                .HasOne(m => m.Sender)
                 .WithMany(u => u.Messages)
                 .HasForeignKey(m => m.UserId);
 
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

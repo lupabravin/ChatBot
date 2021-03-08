@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chat.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatContext))]
-    [Migration("20210307012758_Second Migration")]
-    partial class SecondMigration
+    [Migration("20210308035008_First Migration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,6 +32,7 @@ namespace Chat.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -259,11 +260,11 @@ namespace Chat.Infrastructure.Migrations
 
             modelBuilder.Entity("Chat.Infrastructure.Models.Message", b =>
                 {
-                    b.HasOne("Chat.Infrastructure.Models.AppUser", "User")
+                    b.HasOne("Chat.Infrastructure.Models.AppUser", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("User");
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

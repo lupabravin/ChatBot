@@ -10,23 +10,17 @@ namespace Chat.WebApp.Models
 {
     public class ChatHub : Hub
     {
-        private IChatService _chatService;
-        public ChatHub(IChatService chatService)
+        private IMessageService _messageService;
+        public ChatHub(IMessageService messageService)
         {
-            _chatService = chatService;
+            _messageService = messageService;
         }
-        public async Task PostMessage(string user, string message)
+        public async Task PostMessage(string userId, string userName, string message)
         {
             //  if (message.StartsWith("/"))
 
-
-            //_chatService.Add(new Message
-            //{
-            //    Text = message,
-                
-            //});
-
-            await Clients.All.SendAsync("GetMessage", user, message);
+            _messageService.Add(userId, userName, message);
+            await Clients.All.SendAsync("GetMessage", userId, userName, message);
         }
     }
 }

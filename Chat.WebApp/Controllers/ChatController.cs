@@ -14,18 +14,18 @@ namespace Chat.WebApp.Controllers
     public class ChatController : Controller
     {
         private readonly ILogger<ChatController> _logger;
-        private readonly IChatService _chatService;
+        private readonly IMessageService _messageService;
 
-        public ChatController(ILogger<ChatController> logger, IChatService chatService)
+        public ChatController(ILogger<ChatController> logger, IMessageService messageService)
         {
             _logger = logger;
-            _chatService = chatService;
+            _messageService = messageService;
         }
 
         [Authorize]
         public IActionResult Index()
         {
-            var messages = _chatService.GetMessages(50);
+            var messages = _messageService.GetMessages(50);
             return View(messages);
         }
 
@@ -36,7 +36,7 @@ namespace Chat.WebApp.Controllers
 
         public IActionResult GetMessages()
         {
-            return View(_chatService.GetMessages(50));
+            return View(_messageService.GetMessages(50));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

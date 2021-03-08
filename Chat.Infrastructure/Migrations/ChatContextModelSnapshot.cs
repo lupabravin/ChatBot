@@ -30,6 +30,7 @@ namespace Chat.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -257,11 +258,11 @@ namespace Chat.Infrastructure.Migrations
 
             modelBuilder.Entity("Chat.Infrastructure.Models.Message", b =>
                 {
-                    b.HasOne("Chat.Infrastructure.Models.AppUser", "User")
+                    b.HasOne("Chat.Infrastructure.Models.AppUser", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("User");
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

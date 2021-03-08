@@ -10,13 +10,28 @@ namespace Chat.Infrastructure.Models
 {
     public class Message
     {
+        public Message()
+        {
+
+        }
+        public Message(AppUser User, string text)
+        {
+            this.Sender = User;
+            this.Text = text;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long MessageId { get; set; }
+
+        [Required]
         public string Text { get; set; }
-        public string UserId { get; set; }
+
         public DateTime Date { get; set; } = DateTime.Now;
-        public AppUser User { get; set; }
+
+        public string UserId { get; set; }
+
+        public virtual AppUser Sender { get; set; }
 
     }
 }

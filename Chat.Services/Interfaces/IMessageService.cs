@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Chat.Services.Interfaces
 {
-    public interface IChatService
+    public interface IMessageService
     {
         List<Message> GetMessages(int quantity);
-        Message Add(Message message);
+        Message Add(string userId, string userName, string text);
     }
 }
