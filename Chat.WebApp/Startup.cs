@@ -45,6 +45,7 @@ namespace Chat.WebApp
             #region Application Services
 
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<ICommandService, CommandService>();
 
             #endregion
 

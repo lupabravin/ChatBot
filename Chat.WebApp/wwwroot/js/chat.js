@@ -21,7 +21,7 @@ document.getElementById("btnSend").addEventListener("click", function (e) {
     e.preventDefault();
 });
 
-connection.on("GetMessage", function (userId, userName, message) {
+connection.on("GetMessage", function (userId, userName, message, date) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt");
 
     var sent = false;
@@ -46,8 +46,15 @@ connection.on("GetMessage", function (userId, userName, message) {
     p.textContent = userName;
     p.style = "font-weight: bold";
 
+    var pDate = document.createElement("p");
+    pDate.textContent = date;
+    pDate.style = "font-size: 12px; margin-top: 7px; text-align: right";
+
+    console.log(date, pDate)
+
     div.appendChild(p);
     div.append(msg);
+    div.append(pDate);
 
     li.appendChild(div);
 

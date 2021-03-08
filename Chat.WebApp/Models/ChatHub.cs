@@ -11,16 +11,28 @@ namespace Chat.WebApp.Models
     public class ChatHub : Hub
     {
         private IMessageService _messageService;
-        public ChatHub(IMessageService messageService)
+        private ICommandService _commandService;
+        public ChatHub(IMessageService messageService, ICommandService commandService)
         {
             _messageService = messageService;
+            _commandService = commandService;
         }
         public async Task PostMessage(string userId, string userName, string message)
         {
-            //  if (message.StartsWith("/"))
+            string date;
+            Message msg;
+            if (message.StartsWith("/"))       
+                msg = _commandService.HandleCommand(message);      
+            else
+                msg = _messageService.Add(userId, userName, message);
+               
+            date = msg.Date.Hour.ToString().PadLeft(2, '0') + ":" +
+                           msg.Date.Minute.ToString().PadLeft(2, '0') + " - " +
+                           msg.Date.Month.ToString().PadLeft(2, '0') + "/" +
+                           msg.Date.Day.ToString().PadLeft(2, '0') + "/" +
+                           msg.Date.Year;
 
-            _messageService.Add(userId, userName, message);
-            await Clients.All.SendAsync("GetMessage", userId, userName, message);
+            await Clients.All.SendAsync("GetMessage", msg.UserId, msg.Sender.UserName, msg.Text, date);
         }
     }
 }

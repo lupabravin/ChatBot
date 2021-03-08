@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Infrastructure", "Chat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.WebApp", "Chat.WebApp\Chat.WebApp.csproj", "{E2C04903-03DE-49E2-A55F-8EB40D46A369}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Bot", "Chat.Bot\Chat.Bot.csproj", "{92DFCFEA-BD34-439D-AB44-A5A1B34C9E24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Services", "Chat.Services\Chat.Services.csproj", "{7D001E77-AFBF-4625-8D10-216F170EE570}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Services", "Chat.Services\Chat.Services.csproj", "{7D001E77-AFBF-4625-8D10-216F170EE570}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Repository", "Chat.Repository\Chat.Repository.csproj", "{5C2E1CD5-2513-45D5-B1A6-E1DEBE362FDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Repository", "Chat.Repository\Chat.Repository.csproj", "{5C2E1CD5-2513-45D5-B1A6-E1DEBE362FDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Bot", "Chat.Bot\Chat.Bot.csproj", "{EB384CDE-38D1-4757-8C04-A14B14ABC7BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{E2C04903-03DE-49E2-A55F-8EB40D46A369}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2C04903-03DE-49E2-A55F-8EB40D46A369}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2C04903-03DE-49E2-A55F-8EB40D46A369}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92DFCFEA-BD34-439D-AB44-A5A1B34C9E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92DFCFEA-BD34-439D-AB44-A5A1B34C9E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92DFCFEA-BD34-439D-AB44-A5A1B34C9E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92DFCFEA-BD34-439D-AB44-A5A1B34C9E24}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7D001E77-AFBF-4625-8D10-216F170EE570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D001E77-AFBF-4625-8D10-216F170EE570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D001E77-AFBF-4625-8D10-216F170EE570}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{5C2E1CD5-2513-45D5-B1A6-E1DEBE362FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C2E1CD5-2513-45D5-B1A6-E1DEBE362FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C2E1CD5-2513-45D5-B1A6-E1DEBE362FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB384CDE-38D1-4757-8C04-A14B14ABC7BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB384CDE-38D1-4757-8C04-A14B14ABC7BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB384CDE-38D1-4757-8C04-A14B14ABC7BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB384CDE-38D1-4757-8C04-A14B14ABC7BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

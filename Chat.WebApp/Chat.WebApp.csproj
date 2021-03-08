@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Chat.Services\Chat.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Bot\" />
+  </ItemGroup>
+
 </Project>
