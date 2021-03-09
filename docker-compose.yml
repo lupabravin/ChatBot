@@ -21,8 +21,8 @@ services:
     container_name: rabbit
     image: rabbitmq:management-alpine
     environment: 
-      RABBITMQ_DEFAULT_USER: jobsity
-      RABBITMQ_DEFAULT_PASS: Jobsity2020
+      RABBITMQ_DEFAULT_USER: chatbot
+      RABBITMQ_DEFAULT_PASS: 2021@Challenge!Jobsity
     networks: 
       - chat.network
     ports:
@@ -46,7 +46,7 @@ services:
       - DBPORT=1433
       - DBUSER=sa
       - ENGINE=mssql
-      - RabbitConnectionString=amqp://jobsity:Jobsity2020@rabbit:5672
+      - RabbitConnectionString=amqp://chatbot:2021@Challenge!Jobsity@localhost:5672
     links: 
       - sqlserver
       - rabbit

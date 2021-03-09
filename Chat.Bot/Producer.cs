@@ -6,30 +6,23 @@ namespace Chat.Bot
 {
     public class Producer
     {
-        public void Produce()
-        {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(queue: "BotMessage",
-                                     durable: false,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
+        IModel _channel;
 
-                string message = "Hello World!";
+        public Producer(IModel channel)
+        {
+
+        }
+
+        public void Produce(string message)
+        {
                 var body = Encoding.UTF8.GetBytes(message);
 
-                channel.BasicPublish(exchange: "",
-                                     routingKey: "hello",
+                _channel.BasicPublish(exchange: "",
+                                     routingKey: "BotMessages",
                                      basicProperties: null,
                                      body: body);
                 Console.WriteLine(" [x] Sent {0}", message);
             }
 
-            Console.WriteLine(" Press [enter] to exit.");
-            Console.ReadLine();
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using Chat.Services.Interfaces;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
@@ -10,32 +11,25 @@ namespace Chat.Bot
 {
     public class Consumer
     {
+        IModel _channel;
+
+        public Consumer(IModel channel)
+        {
+            _channel = channel;
+        }
+
         public void Consume()
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            var consumer = new EventingBasicConsumer(_channel);
+            consumer.Received += (model, ea) =>
             {
-                channel.QueueDeclare(queue: "ChatCommands",
-                                     durable: false,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
-
-                var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += (model, ea) =>
-                {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine(" [x] Received {0}", message);
-                };
-                channel.BasicConsume(queue: "hello",
-                                     autoAck: true,
-                                     consumer: consumer);
-
-                Console.WriteLine(" Press [enter] to exit.");
-                Console.ReadLine();
-            }
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+            };
+            _channel.BasicConsume(queue: "ChatCommands",
+                                 autoAck: true,
+                                 consumer: consumer);
         }
     }
 }
+

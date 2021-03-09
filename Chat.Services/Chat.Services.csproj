@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Chat.CrossCutting\Chat.CrossCutting.csproj" />
     <ProjectReference Include="..\Chat.Infrastructure\Chat.Infrastructure.csproj" />
     <ProjectReference Include="..\Chat.Repository\Chat.Repository.csproj" />
   </ItemGroup>

@@ -1,4 +1,6 @@
-﻿using RabbitMQ.Client;
+﻿using Chat.CrossCutting.Helpers;
+using Chat.CrossCutting.Interfaces;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
@@ -8,34 +10,11 @@ using System.Threading.Tasks;
 
 namespace Chat.WebApp.Bot
 {
-    public class Consumer
+    public class Consumer : CrossCutting.Consumer
     {
-        public void Consume()
+        public string Consume()
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.QueueDeclare(queue: "ChatCommands",
-                                     durable: false,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
-
-                var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += (model, ea) =>
-                {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine(" [x] Received {0}", message);
-                };
-                channel.BasicConsume(queue: "hello",
-                                     autoAck: true,
-                                     consumer: consumer);
-
-                Console.WriteLine(" Press [enter] to exit.");
-                Console.ReadLine();
-            }
+            return Consume<string>(BotHelper.CHAT_COMMANDS_QUEUE);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Chat.Infrastructure.Models;
 using Chat.Services.Interfaces;
+using Chat.WebApp.Helpers;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -19,20 +20,21 @@ namespace Chat.WebApp.Models
         }
         public async Task PostMessage(string userId, string userName, string message)
         {
-            string date;
             Message msg;
-            if (message.StartsWith("/"))       
-                msg = _commandService.HandleCommand(message);      
+            if (message.StartsWith("/"))
+            {
+                await Push(userId, userName, message, DateTime.Now.FormatDate());
+                msg = _commandService.HandleCommand(message);
+            }
             else
                 msg = _messageService.Add(userId, userName, message);
                
-            date = msg.Date.Hour.ToString().PadLeft(2, '0') + ":" +
-                           msg.Date.Minute.ToString().PadLeft(2, '0') + " - " +
-                           msg.Date.Month.ToString().PadLeft(2, '0') + "/" +
-                           msg.Date.Day.ToString().PadLeft(2, '0') + "/" +
-                           msg.Date.Year;
+            await Push(msg.UserId, msg.Sender.UserName, msg.Text, msg.Date.FormatDate());
+        }
 
-            await Clients.All.SendAsync("GetMessage", msg.UserId, msg.Sender.UserName, msg.Text, date);
+        public async Task Push(string userId, string userName, string message, string date)
+        {
+            await Clients.All.SendAsync("GetMessage", userId, userName, message, date);
         }
     }
 }
