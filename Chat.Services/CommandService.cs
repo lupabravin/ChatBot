@@ -43,10 +43,6 @@ namespace Chat.Services
 
                     var keyValuePair = KeyValuePair.Create(command, parameter);
 
-                    ILoggerFactory fac = new LoggerFactory();
-                    ILogger logger = new Logger<Producer>(fac);
-                    logger.LogInformation($"\n\n\n\n\n\n ----------------------------- Producer Crosscutting: {_rabbitConnection} --------------------------- \n\n\n\n\n\n ");
-
                     _producer.Produce(keyValuePair, BotHelper.CHAT_COMMANDS_QUEUE, _rabbitConnection);
                 }
                 else
