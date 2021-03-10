@@ -1,5 +1,6 @@
 ﻿using Chat.CrossCutting.Helpers;
 using Chat.CrossCutting.Interfaces;
+using Chat.WebApp.Hubs;
 using Chat.WebApp.Models;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;

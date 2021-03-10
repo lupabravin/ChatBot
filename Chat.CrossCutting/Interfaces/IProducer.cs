@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Chat.CrossCutting.Interfaces
+﻿namespace Chat.CrossCutting.Interfaces
 {
     public interface IProducer
     {

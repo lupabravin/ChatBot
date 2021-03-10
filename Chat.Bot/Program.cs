@@ -1,10 +1,7 @@
 ﻿using Chat.CrossCutting.Helpers;
 using System;
 using System.IO;
-using RabbitMQ.Client;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using System.Threading;
 
 namespace Chat.Bot
 {

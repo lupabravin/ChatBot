@@ -1,8 +1,4 @@
-﻿using RabbitMQ.Client;
-using System;
-using System.Text;
-
-namespace Chat.Bot
+﻿namespace Chat.Bot
 {
     public class Producer : CrossCutting.Producer
     {
