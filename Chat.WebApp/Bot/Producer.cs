@@ -12,9 +12,10 @@ namespace Chat.WebApp.Bot
 {
     public class Producer : CrossCutting.Producer
     {
-        public void Produce(string command, string parameter)
+        public void Produce(string command, string parameter, string targetQueue, string rabbitConnection)
         {
-            Produce((command, parameter), BotHelper.CHAT_COMMANDS_QUEUE);
+            var keyValuePair = KeyValuePair.Create(command, parameter);
+            Produce(keyValuePair, targetQueue, rabbitConnection);
         }
     }
 }

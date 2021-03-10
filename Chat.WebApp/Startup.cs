@@ -1,3 +1,5 @@
+using Chat.CrossCutting;
+using Chat.CrossCutting.Interfaces;
 using Chat.Infrastructure.Models;
 using Chat.Repository;
 using Chat.Repository.Interfaces;
@@ -46,6 +48,9 @@ namespace Chat.WebApp
 
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ICommandService, CommandService>();
+            services.AddScoped<IProducer, Producer>();
+            services.AddScoped<IConsumer, Consumer>();
+            services.AddHostedService<Bot.Consumer>();
 
             #endregion
 
@@ -61,6 +66,7 @@ namespace Chat.WebApp
             services.AddRazorPages();
             services.AddSignalR();
             services.AddControllers();
+
 
         }
 

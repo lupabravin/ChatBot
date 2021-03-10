@@ -4,25 +4,16 @@ using System.Text;
 
 namespace Chat.Bot
 {
-    public class Producer
+    public class Producer : CrossCutting.Producer
     {
-        IModel _channel;
-
-        public Producer(IModel channel)
+        string _rabbitConnection;
+        public Producer(string rabbitConnection)
         {
-
+            _rabbitConnection = rabbitConnection;
         }
-
-        public void Produce(string message)
+        public void Produce(string message, string targetQueue)
         {
-                var body = Encoding.UTF8.GetBytes(message);
-
-                _channel.BasicPublish(exchange: "",
-                                     routingKey: "BotMessages",
-                                     basicProperties: null,
-                                     body: body);
-                Console.WriteLine(" [x] Sent {0}", message);
-            }
-
+            Produce(message, targetQueue, _rabbitConnection);
+        }
     }
 }

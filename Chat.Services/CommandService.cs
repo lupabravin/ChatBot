@@ -2,6 +2,7 @@
 using Chat.CrossCutting.Interfaces;
 using Chat.Infrastructure.Models;
 using Chat.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,14 @@ namespace Chat.Services
     public class CommandService : ICommandService
     {
         IProducer _producer;
-        public CommandService(IProducer producer)
+        IConfiguration _configuration;
+        string _rabbitConnection;
+
+        public CommandService(IProducer producer, IConfiguration configuration)
         {
             _producer = producer;
+            _configuration = configuration;
+            _rabbitConnection = _configuration.GetConnectionString("RabbitMQConnection") ?? Environment.GetEnvironmentVariable("RabbitMQConnection");
         }
 
         public Message HandleCommand(string message)
@@ -32,7 +38,8 @@ namespace Chat.Services
                     if (!message.Contains('=') || string.IsNullOrEmpty(parameter))
                         throw new Exception(ErrorMessages.COMMAND_MISSING_PARAMETER.Replace("[command]", command));
 
-                    _producer.Produce(command, parameter);
+                    var keyValuePair = KeyValuePair.Create(command, parameter);
+                    _producer.Produce(keyValuePair, BotHelper.CHAT_COMMANDS_QUEUE, _rabbitConnection);
                 }
                 else
                     throw new Exception(ErrorMessages.UNKNOWN_COMMAND + message);

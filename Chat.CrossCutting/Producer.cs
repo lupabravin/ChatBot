@@ -11,14 +11,14 @@ namespace Chat.CrossCutting
 {
     public class Producer : IProducer
     {
-        public void Produce<T>(T obj, string targetQueue)
+        public void Produce<T>(T obj, string targetQueue, string rabbitConnection)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory() { Uri = new Uri(rabbitConnection) };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
                 channel.QueueDeclare(queue: targetQueue,
-                                     durable: false,
+                                     durable: true,
                                      exclusive: false,
                                      autoDelete: false,
                                      arguments: null);

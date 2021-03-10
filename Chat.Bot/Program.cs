@@ -1,8 +1,10 @@
 ﻿using Chat.CrossCutting.Helpers;
-using Chat.Services;
-using Chat.Services.Interfaces;
-using RabbitMQ.Client;
 using System;
+using System.IO;
+using RabbitMQ.Client;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Threading;
 
 namespace Chat.Bot
 {
@@ -10,24 +12,28 @@ namespace Chat.Bot
     {
         static void Main(string[] args)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            try
             {
-                channel.QueueDeclare(queue: BotHelper.CHAT_COMMANDS_QUEUE,
-                                     durable: false,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
+                string rabbitConnection = Environment.GetEnvironmentVariable("RabbitMQConnection");
+                if (string.IsNullOrEmpty(rabbitConnection))
+                {
+                    var builder =
+                        new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-                channel.QueueDeclare(queue: BotHelper.BOT_MESSAGES_QUEUE,
-                                    durable: false,
-                                    exclusive: false,
-                                    autoDelete: false,
-                                    arguments: null);
+                    IConfigurationRoot configuration = builder.Build();
+                    rabbitConnection = configuration.GetConnectionString("RabbitMQConnection");
+                }
 
-                var consumer = new Consumer(channel);
-                consumer.Consume();
+                var producer = new Producer(rabbitConnection);
+                var consumer = new Consumer(rabbitConnection, producer);
+
+                while (true)
+                    consumer.Consume(BotHelper.CHAT_COMMANDS_QUEUE);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error: " + ex);
             }
         }
     }

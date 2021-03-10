@@ -24,7 +24,7 @@ namespace Chat.Repository
 
         public Message Add(Message message)
         {
-            _chatContext.Add(message);
+            _chatContext.Messages.Add(message);
             _chatContext.SaveChanges();
 
             return message;

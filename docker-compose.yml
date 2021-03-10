@@ -22,7 +22,7 @@ services:
     image: rabbitmq:management-alpine
     environment: 
       RABBITMQ_DEFAULT_USER: chatbot
-      RABBITMQ_DEFAULT_PASS: 2021@Challenge!Jobsity
+      RABBITMQ_DEFAULT_PASS: chatbot1337
     networks: 
       - chat.network
     ports:
@@ -46,7 +46,7 @@ services:
       - DBPORT=1433
       - DBUSER=sa
       - ENGINE=mssql
-      - RabbitConnectionString=amqp://chatbot:2021@Challenge!Jobsity@localhost:5672
+      - RabbitMQConnection=amqp://chatbot:chatbot1337@localhost:5672
     links: 
       - sqlserver
       - rabbit

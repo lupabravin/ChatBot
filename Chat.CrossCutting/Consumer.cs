@@ -1,42 +1,69 @@
-﻿using RabbitMQ.Client;
+﻿using Chat.CrossCutting.Interfaces;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Chat.CrossCutting
 {
-    public class Consumer
+    public class Consumer : IConsumer, IDisposable
     {
-        public T Consume<T>(string targetQueue)
+        IConnection _connection;
+        IModel _channel;
+        public void Consume<T>(string targetQueue, string rabbitConnection, Action<T> callback)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            var factory = new ConnectionFactory() { Uri = new Uri(rabbitConnection) };
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
+
+            _channel.QueueDeclare(queue: targetQueue,
+                                 durable: true,
+                                 exclusive: false,
+                                 autoDelete: false,
+                                 arguments: null);
+
+            var consumer = new EventingBasicConsumer(_channel);
+            consumer.Received += (model, ea) =>
             {
-                T queueObject = default(T);
-                channel.QueueDeclare(queue: targetQueue,
-                                     durable: false,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
+                var body = ea.Body.ToArray();
+                object result;
+                if (typeof(T) == typeof(string))
+                    result = Encoding.UTF8.GetString(body).Replace("\"", "");
+                else
+                    result = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(body));
 
-                var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += (model, ea) =>
-                {
-                    var body = ea.Body.ToArray();
-                    T queueObject = JsonSerializer.Deserialize<T>(body);
-                };
-                channel.BasicConsume(queue: targetQueue,
-                                     autoAck: true,
-                                     consumer: consumer);
+                callback((T)result);
+            };
 
-                return queueObject;
+            consumer.Registered += OnConsumerRegistered;
+            consumer.Shutdown += OnConsumerShutdown;
+            consumer.Unregistered += OnConsumerUnregistered;
+            consumer.ConsumerCancelled += OnConsumerCanceled;
 
-            }
+            _channel.BasicConsume(queue: targetQueue,
+                                 autoAck: true,
+                                 consumer: consumer);
+
+        }
+
+        private void OnConsumerCanceled(object sender, ConsumerEventArgs e) { }
+
+        private void OnConsumerUnregistered(object sender, ConsumerEventArgs e) { }
+
+        private void OnConsumerShutdown(object sender, ShutdownEventArgs e) { }
+
+        private void OnConsumerRegistered(object sender, ConsumerEventArgs e) { }
+
+        public void Dispose()
+        {
+            _channel.Close();
+            _connection.Close();
         }
     }
 }
