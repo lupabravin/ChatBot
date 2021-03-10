@@ -23,12 +23,11 @@ document.getElementById("btnSend").addEventListener("click", function (e) {
 
 connection.on("GetMessage", function (userId, userName, message, date) {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt");
+    var msgList = document.getElementById("messagesList");
 
     var sent = false;
     if (userId == id)
         sent = true;
-
-    console.log(userId, id, sent)
 
     var li = document.createElement("li");
     var div = document.createElement("div");
@@ -50,13 +49,15 @@ connection.on("GetMessage", function (userId, userName, message, date) {
     pDate.textContent = date;
     pDate.style = "font-size: 12px; margin-top: 7px; text-align: right";
 
-    console.log(date, pDate)
-
     div.appendChild(p);
     div.append(msg);
     div.append(pDate);
 
     li.appendChild(div);
+    console.log(msgList, msgList.children.length)
+
+    if (msgList.children.length == 50)
+        msgList.removeChild(msgList.children[0]);
 
     document.getElementById("messagesList").appendChild(li);
     mainDiv.scrollTop = mainDiv.scrollHeight;

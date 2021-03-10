@@ -38,11 +38,12 @@
                         msg.Date.Year;
 
 
-                        var sent = msg.UserId == userId;
+                    var sent = msg.UserId == userId;
                     var divClass = sent ? "message sent" : "message received";
+                    var divStyle = sent ? "text-align: right;" : "text-align: left;";
                     var liStyle = sent ? "text-align: -webkit-right;" : "text-align: -webkit-left;";
                     <li style="@liStyle">
-                        <div class="@divClass" style="text-align: left">
+                        <div class="@divClass" style="@divStyle">
                             <p style="font-weight: bold; text-align: right">@msg.Sender.UserName</p>
                             @msg.Text
                             <p style="font-size: 12px; margin-top: 7px; text-align: right">@date</p>
@@ -58,7 +59,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-12" style="display: flex">
             <input type="text" id="userMessage" />
             <input type="button" id="btnSend" value="Send" />
         </div>

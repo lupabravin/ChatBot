@@ -16,10 +16,9 @@ namespace Chat.Repository
         }
         public List<Message> GetMessages(int quantity)
         {
-            return _chatContext.Messages?
-                    .Include(m => m.Sender)
+            return _chatContext.Messages.Include(m => m.Sender)
                     .OrderBy(m => m.Date)
-                    .Take(quantity).ToList();
+                    .Skip(Math.Max(0, _chatContext.Messages.Count() - quantity)).ToList();
         }
 
         public Message Add(Message message)

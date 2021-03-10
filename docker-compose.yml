@@ -55,6 +55,21 @@ services:
     ports: 
       - "4000:80"
     restart: on-failure
-
+    
+    
+    bot:
+        build:
+          context: ./Chat.Bot
+          dockerfile: Dockerfile
+        container_name: bot
+        depends_on: 
+          - rabbit
+        environment: 
+          - RabbitConnectionString=amqp://chatbot:chatbot1337@localhost:5672
+        links: 
+          - rabbit
+        networks:
+          - chat.network
+        restart: on-failure
 networks: 
   chat.network:

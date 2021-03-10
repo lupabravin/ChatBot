@@ -92,7 +92,7 @@ p {
 }
 
 #userMessage {
-    width: 89.5%;
+    width: 90%;
 }
 
 #messagesList {
@@ -100,6 +100,7 @@ p {
 }
 
 #btnSend {
+    margin-left: 1%;
     width: 10%
 }
 

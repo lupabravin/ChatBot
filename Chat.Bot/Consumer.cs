@@ -54,7 +54,7 @@ namespace Chat.Bot
             }
             catch (Exception ex)
             {
-                return $"A problem ocurred while trying to get \"{parameter}\" infos: " + ex.Message;
+                return $"A problem ocurred while trying to get \'{parameter}\' infos: " + ex.Message;
             }
         }
     }

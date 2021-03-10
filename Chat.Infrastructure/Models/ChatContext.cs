@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace Chat.Infrastructure.Models
 {
-    public class ChatContext : IdentityDbContext
+    public class ChatContext : IdentityDbContext, IDataProtectionKeyContext
     {
         public ChatContext(DbContextOptions<ChatContext> options) : base(options)
         {
         }
 
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
 
