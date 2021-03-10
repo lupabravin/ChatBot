@@ -1,4 +1,5 @@
 ﻿using Chat.CrossCutting.Interfaces;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -7,12 +8,16 @@ using System.Text;
 
 namespace Chat.CrossCutting
 {
-    public class Consumer : IConsumer, IDisposable
+    public class Consumer : IConsumer
     {
         IConnection _connection;
         IModel _channel;
         public void Consume<T>(string targetQueue, string rabbitConnection, Action<T> callback)
         {
+            ILoggerFactory fac = new LoggerFactory();
+            ILogger logger = new Logger<Consumer>(fac);
+            logger.LogInformation($"\n\n\n\n\n\n ----------------------------- Consumer Crosscutting: {rabbitConnection} --------------------------- \n\n\n\n\n\n ");
+
             var factory = new ConnectionFactory() { Uri = new Uri(rabbitConnection) };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
@@ -55,10 +60,6 @@ namespace Chat.CrossCutting
 
         private void OnConsumerRegistered(object sender, ConsumerEventArgs e) { }
 
-        public void Dispose()
-        {
-            _channel.Close();
-            _connection.Close();
-        }
+       
     }
 }

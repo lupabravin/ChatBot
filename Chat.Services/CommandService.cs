@@ -1,8 +1,10 @@
-﻿using Chat.CrossCutting.Helpers;
+﻿using Chat.CrossCutting;
+using Chat.CrossCutting.Helpers;
 using Chat.CrossCutting.Interfaces;
 using Chat.Infrastructure.Models;
 using Chat.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace Chat.Services
         {
             _producer = producer;
             _configuration = configuration;
-            _rabbitConnection = _configuration?.GetConnectionString("RabbitMQConnection") ?? Environment.GetEnvironmentVariable("RabbitMQConnection");
+            _rabbitConnection = Environment.GetEnvironmentVariable("RabbitMQConnection") ?? _configuration?.GetConnectionString("RabbitMQConnection");
         }
 
         public Message HandleCommand(string message)
@@ -40,6 +42,11 @@ namespace Chat.Services
                         throw new Exception(ErrorMessages.COMMAND_MISSING_PARAMETER.Replace("[command]", command));
 
                     var keyValuePair = KeyValuePair.Create(command, parameter);
+
+                    ILoggerFactory fac = new LoggerFactory();
+                    ILogger logger = new Logger<Producer>(fac);
+                    logger.LogInformation($"\n\n\n\n\n\n ----------------------------- Producer Crosscutting: {_rabbitConnection} --------------------------- \n\n\n\n\n\n ");
+
                     _producer.Produce(keyValuePair, BotHelper.CHAT_COMMANDS_QUEUE, _rabbitConnection);
                 }
                 else

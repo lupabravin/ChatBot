@@ -9,29 +9,24 @@ namespace Chat.Bot
     {
         static void Main(string[] args)
         {
-            try
+
+            string rabbitConnection = Environment.GetEnvironmentVariable("RabbitMQConnection");
+            if (string.IsNullOrEmpty(rabbitConnection))
             {
-                string rabbitConnection = Environment.GetEnvironmentVariable("RabbitMQConnection");
-                if (string.IsNullOrEmpty(rabbitConnection))
-                {
-                    var builder =
-                        new ConfigurationBuilder()
-                        .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                var builder =
+                    new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-                    IConfigurationRoot configuration = builder.Build();
-                    rabbitConnection = configuration.GetConnectionString("RabbitMQConnection");
-                }
-
-                var producer = new Producer(rabbitConnection);
-                var consumer = new Consumer(rabbitConnection, producer);
-
-                while (true)
-                    consumer.Consume(BotHelper.CHAT_COMMANDS_QUEUE);
+                IConfigurationRoot configuration = builder.Build();
+                rabbitConnection = configuration.GetConnectionString("RabbitMQConnection");
             }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Error: " + ex);
-            }
+
+            var producer = new Producer(rabbitConnection);
+            var consumer = new Consumer(rabbitConnection, producer);
+
+            while (true)
+                consumer.Consume(BotHelper.CHAT_COMMANDS_QUEUE);
+
         }
     }
 }

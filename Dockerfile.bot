@@ -1,0 +1,24 @@
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/runtime:5.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY ["Chat.Bot/Chat.Bot.csproj", "Chat.Bot/"]
+COPY ["Chat.Services/Chat.Services.csproj", "Chat.Services/"]
+COPY ["Chat.CrossCutting/Chat.CrossCutting.csproj", "Chat.CrossCutting/"]
+COPY ["Chat.Repository/Chat.Repository.csproj", "Chat.Repository/"]
+COPY ["Chat.Infrastructure/Chat.Infrastructure.csproj", "Chat.Infrastructure/"]
+RUN dotnet restore "Chat.Bot/Chat.Bot.csproj"
+COPY . .
+WORKDIR "/src/Chat.Bot"
+RUN dotnet build "Chat.Bot.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Chat.Bot.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Chat.Bot.dll"]

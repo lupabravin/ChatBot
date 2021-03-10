@@ -21,6 +21,7 @@ namespace Chat.Bot
 
         public void Consume(string targetQueue)
         {
+            Console.WriteLine($"\n\n\n\n\n\n\n----------------------------- Consumer: {_rabbitConnection} ------------------------------\n\n\n\n\n\n\n\n\n\n");
             Consume<KeyValuePair<string,string>>(targetQueue, _rabbitConnection, result => {
                 _producer.Produce(SearchStock(result), BotHelper.BOT_MESSAGES_QUEUE);
             });

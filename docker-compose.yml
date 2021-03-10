@@ -6,6 +6,7 @@ services:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "2021@Challenge!Jobsity"
     image: mcr.microsoft.com/mssql/server:2019-latest
+    user: root
     networks:
       - chat.network
     ports: 
@@ -32,11 +33,11 @@ services:
     volumes: 
       - ./volumes/rabbit:/var/lib/rabbitmq/mnesia
 
-  web:
+  chat:
     build:
-      context: ./Chat.WebApp
-      dockerfile: Dockerfile
-    container_name: web
+      context: .
+      dockerfile: Dockerfile.chat
+    container_name: chat
     depends_on: 
       - rabbit
     environment: 
@@ -46,7 +47,7 @@ services:
       - DBPORT=1433
       - DBUSER=sa
       - ENGINE=mssql
-      - RabbitMQConnection=amqp://chatbot:chatbot1337@localhost:5672
+      - RabbitMQConnection=amqp://chatbot:chatbot1337@rabbit:5672
     links: 
       - sqlserver
       - rabbit
@@ -55,21 +56,20 @@ services:
     ports: 
       - "4000:80"
     restart: on-failure
-    
-    
-    bot:
-        build:
-          context: ./Chat.Bot
-          dockerfile: Dockerfile
-        container_name: bot
-        depends_on: 
-          - rabbit
-        environment: 
-          - RabbitConnectionString=amqp://chatbot:chatbot1337@localhost:5672
-        links: 
-          - rabbit
-        networks:
-          - chat.network
-        restart: on-failure
+      
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    container_name: bot
+    depends_on: 
+      - rabbit
+    environment: 
+      - RabbitMQConnection=amqp://chatbot:chatbot1337@rabbit:5672
+    links: 
+      - rabbit
+    networks:
+      - chat.network
+    restart: on-failure
 networks: 
   chat.network:

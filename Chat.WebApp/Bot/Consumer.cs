@@ -1,16 +1,9 @@
 ﻿using Chat.CrossCutting.Helpers;
-using Chat.CrossCutting.Interfaces;
 using Chat.WebApp.Hubs;
-using Chat.WebApp.Models;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,10 +38,5 @@ namespace Chat.WebApp.Bot
             return Task.CompletedTask;
         }
 
-        public override void Dispose()
-        {
-            _consumer.Dispose();
-            base.Dispose();
-        }
     }
 }

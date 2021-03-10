@@ -8,6 +8,7 @@ namespace Chat.Infrastructure.Models
     {
         public ChatContext(DbContextOptions<ChatContext> options) : base(options)
         {
+            Database.Migrate();
         }
 
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
