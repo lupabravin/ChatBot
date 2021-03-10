@@ -19,7 +19,7 @@ namespace Chat.Services
         {
             _producer = producer;
             _configuration = configuration;
-            _rabbitConnection = _configuration.GetConnectionString("RabbitMQConnection") ?? Environment.GetEnvironmentVariable("RabbitMQConnection");
+            _rabbitConnection = _configuration?.GetConnectionString("RabbitMQConnection") ?? Environment.GetEnvironmentVariable("RabbitMQConnection");
         }
 
         public Message HandleCommand(string message)
@@ -29,7 +29,10 @@ namespace Chat.Services
             {
                 var split = message.Split("=");
                 var command = split[0];
-                var parameter = split[1];
+                var parameter = "";
+
+                if (split.Length > 1)
+                    parameter = split[1];
 
                 if (!string.IsNullOrEmpty(command) && BotHelper.COMMANDS.Keys.Contains(command))
                 {
