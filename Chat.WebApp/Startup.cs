@@ -99,7 +99,7 @@ namespace Chat.WebApp
 
         private string GetDatabaseConnectionString()
         {
-            // The next lines will help us to connect to a docker database instance
+            // Following code tries to connect to the docker container hosted SqlServer database
             string connectionString = "";
 
             string database = Configuration["DBDATABASE"];
@@ -108,15 +108,12 @@ namespace Chat.WebApp
             string port = Configuration["DBPORT"];
             string user = Configuration["DBUSER"];
 
-            // If any of the variables is null, get connectionString from appSettings.json
-            if (new List<string>() { database, host, password, port }.Any(s => s == null))
-            {
+            // If the host environment variable is not set, get the connection from the configuration file
+            if (string.IsNullOrEmpty(host))
                 connectionString = Configuration.GetConnectionString("DefaultConnection");
-            }
             else
-            {
                 connectionString = $"Server={host}, {port};Database={database};User Id={user};Password={password};";
-            }
+
             return connectionString;
         }
     }

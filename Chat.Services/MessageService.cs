@@ -1,7 +1,6 @@
 ﻿using Chat.Infrastructure.Models;
 using Chat.Repository.Interfaces;
 using Chat.Services.Interfaces;
-using System;
 using System.Collections.Generic;
 
 namespace Chat.Services
