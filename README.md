@@ -1,7 +1,7 @@
 
 # ChatBot
 
-**Jobisty Back-End Challenge**
+**Jobisty Back-End Challenge**  
 [.NET Core](https://dotnet.microsoft.com/download) Web Application that implements a Chat with SignalR and a Bot with RabbitMQ
 ## Features
 - Registered users can log in and talk with other users in a chatroom.
