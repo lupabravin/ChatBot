@@ -33,8 +33,7 @@ namespace Chat.Tests.Services
         public void Command_HandleCommand_ShouldReturnErrorMessage(string message)
         {
             //Arrange  
-            ChatContext context;
-            _commandService = CreateFakeService(out context);
+            _commandService = CreateFakeService(out _);
             
             var split = message.Split("=");
             var command = split[0];
@@ -50,11 +49,10 @@ namespace Chat.Tests.Services
             else if(!message.Contains('=') || string.IsNullOrEmpty(parameter))
                 errorMessage = ErrorMessages.COMMAND_MISSING_PARAMETER.Replace("[command]", command);
 
-
-            //Act & Assert
-
+            //Act
             var exceptionMessage = _commandService.HandleCommand(message);
 
+            //Assert
             exceptionMessage.Text.Should().BeEquivalentTo(errorMessage);
         }
 
